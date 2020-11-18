@@ -31,6 +31,7 @@ class PridictionTile extends StatelessWidget {
       Provider.of<AppState>(context, listen: false)
           .updateDestinationAddress(address);
       print(address.placeName);
+      Navigator.pop(context, 'getDirection');
     }
   }
 

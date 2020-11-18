@@ -140,11 +140,14 @@ class _HomePageState extends State<HomePage> {
                           height: 20,
                         ),
                         GestureDetector(
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async {
+                            var res = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => SearchDestination()));
+                            if (res == 'getDirection') {
+                              await getDirection(context);
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -202,6 +205,22 @@ class _HomePageState extends State<HomePage> {
           )),
     );
   }
+}
+
+Future<void> getDirection(context) async {
+  print("hello");
+
+  var pickUp = Provider.of<AppState>(context, listen: false).pickupAddress;
+  print("tett ${pickUp.latitude} ${pickUp.longitude}");
+  var destination =
+      Provider.of<AppState>(context, listen: false).destinationAddress;
+  print("tett ${destination.latitude} ${destination.longitude}");
+  var pickLatLng = LatLng(pickUp.latitude, pickUp.longitude);
+  var destinationLatLng = LatLng(destination.latitude, destination.longitude);
+
+  var details =
+      await HelperMethods.getDirectionDetails(pickLatLng, destinationLatLng);
+  print(details.encodedPoints);
 }
 
 class IconTitle extends StatelessWidget {
