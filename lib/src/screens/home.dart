@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
-import 'package:shifter_app/src/styles/styles.dart';
+import 'package:shifter_app/src/providers/app_state.dart';
+import 'package:shifter_app/src/screens/search_destination.dart';
+import 'package:shifter_app/src/utils/helper_methods.dart';
 import 'package:shifter_app/src/widgets/drawer.dart';
 import 'package:shifter_app/src/widgets/shifter_divider.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,6 +21,24 @@ class _HomePageState extends State<HomePage> {
   Completer<GoogleMapController> _controller = Completer();
   double mapBottomPadding = 0;
   GlobalKey<ScaffoldState> scaffoldkey = new GlobalKey<ScaffoldState>();
+  GoogleMapController mapController;
+
+  Position currentPosition;
+
+  void setUpPositionLocator() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.bestForNavigation);
+    currentPosition = position;
+    String address =
+        await HelperMethods.findCordinateAddress(position, context);
+    print('hryyy');
+    print(address);
+
+    LatLng currentLatLng = LatLng(position.latitude, position.longitude);
+    CameraPosition cameraPosition =
+        new CameraPosition(target: currentLatLng, zoom: 14);
+    mapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+  }
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(-1.129154, 36.995559),
@@ -36,11 +58,15 @@ class _HomePageState extends State<HomePage> {
                 initialCameraPosition: _kGooglePlex,
                 mapType: MapType.normal,
                 myLocationButtonEnabled: true,
+                zoomControlsEnabled: true,
+                zoomGesturesEnabled: true,
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
+                  mapController = controller;
                   setState(() {
                     mapBottomPadding = 290;
                   });
+                  setUpPositionLocator();
                 },
               ),
               // MenuButton
@@ -113,29 +139,37 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           height: 20,
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(4),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 5.0,
-                                    offset: Offset(0.7, 0.7))
-                              ]),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.search,
-                                  color: Colors.blueAccent,
-                                ),
-                                SizedBox(
-                                  width: 10.0,
-                                ),
-                                Text("Search Destination")
-                              ],
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SearchDestination()));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(4),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 5.0,
+                                      offset: Offset(0.7, 0.7))
+                                ]),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.search,
+                                    color: Colors.blueAccent,
+                                  ),
+                                  SizedBox(
+                                    width: 10.0,
+                                  ),
+                                  Text("Search Destination")
+                                ],
+                              ),
                             ),
                           ),
                         ),
