@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
@@ -22,6 +23,8 @@ class _HomePageState extends State<HomePage> {
   double mapBottomPadding = 0;
   GlobalKey<ScaffoldState> scaffoldkey = new GlobalKey<ScaffoldState>();
   GoogleMapController mapController;
+  List<LatLng> polylineCordinates = [];
+  Set<Polyline> _polyline = {};
 
   Position currentPosition;
 
@@ -31,8 +34,6 @@ class _HomePageState extends State<HomePage> {
     currentPosition = position;
     String address =
         await HelperMethods.findCordinateAddress(position, context);
-    print('hryyy');
-    print(address);
 
     LatLng currentLatLng = LatLng(position.latitude, position.longitude);
     CameraPosition cameraPosition =
@@ -44,6 +45,45 @@ class _HomePageState extends State<HomePage> {
     target: LatLng(-1.129154, 36.995559),
     zoom: 14.4746,
   );
+
+  Future<void> getDirection() async {
+    print("hello");
+
+    var pickUp = Provider.of<AppState>(context, listen: false).pickupAddress;
+    print("tett ${pickUp.latitude} ${pickUp.longitude}");
+    var destination =
+        Provider.of<AppState>(context, listen: false).destinationAddress;
+    print("tett ${destination.latitude} ${destination.longitude}");
+    var pickLatLng = LatLng(pickUp.latitude, pickUp.longitude);
+    var destinationLatLng = LatLng(destination.latitude, destination.longitude);
+
+    var details =
+        await HelperMethods.getDirectionDetails(pickLatLng, destinationLatLng);
+    print(details.encodedPoints);
+    PolylinePoints polylinePoints = PolylinePoints();
+    List<PointLatLng> results =
+        polylinePoints.decodePolyline(details.encodedPoints);
+    polylineCordinates.clear();
+    if (results.isNotEmpty) {
+      results.forEach((PointLatLng points) {
+        polylineCordinates.add(LatLng(points.latitude, points.longitude));
+      });
+    }
+    _polyline.clear();
+    setState(() {
+      Polyline polyline = Polyline(
+          polylineId: PolylineId('polyid'),
+          color: Color.fromARGB(255, 95, 109, 237),
+          points: polylineCordinates,
+          jointType: JointType.round,
+          width: 4,
+          startCap: Cap.roundCap,
+          endCap: Cap.roundCap,
+          geodesic: true);
+
+      _polyline.add(polyline);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +100,7 @@ class _HomePageState extends State<HomePage> {
                 myLocationButtonEnabled: true,
                 zoomControlsEnabled: true,
                 zoomGesturesEnabled: true,
+                polylines: _polyline,
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
                   mapController = controller;
@@ -146,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                                 MaterialPageRoute(
                                     builder: (context) => SearchDestination()));
                             if (res == 'getDirection') {
-                              await getDirection(context);
+                              await getDirection();
                             }
                           },
                           child: Container(
@@ -205,22 +246,6 @@ class _HomePageState extends State<HomePage> {
           )),
     );
   }
-}
-
-Future<void> getDirection(context) async {
-  print("hello");
-
-  var pickUp = Provider.of<AppState>(context, listen: false).pickupAddress;
-  print("tett ${pickUp.latitude} ${pickUp.longitude}");
-  var destination =
-      Provider.of<AppState>(context, listen: false).destinationAddress;
-  print("tett ${destination.latitude} ${destination.longitude}");
-  var pickLatLng = LatLng(pickUp.latitude, pickUp.longitude);
-  var destinationLatLng = LatLng(destination.latitude, destination.longitude);
-
-  var details =
-      await HelperMethods.getDirectionDetails(pickLatLng, destinationLatLng);
-  print(details.encodedPoints);
 }
 
 class IconTitle extends StatelessWidget {
