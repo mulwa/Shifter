@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
+import 'package:shifter_app/src/styles/styles.dart';
+import 'package:shifter_app/src/widgets/drawer.dart';
 import 'package:shifter_app/src/widgets/shifter_divider.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,6 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Completer<GoogleMapController> _controller = Completer();
   double mapBottomPadding = 0;
+  GlobalKey<ScaffoldState> scaffoldkey = new GlobalKey<ScaffoldState>();
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(-1.129154, 36.995559),
@@ -24,28 +27,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          drawer: Container(
-            width: 250,
-            color: Colors.white,
-            child: ListView(
-              padding: EdgeInsets.all(0),
-              children: [
-                Container(
-                  height: 160,
-                  child: DrawerHeader(
-                      child: Row(
-                    children: [
-                      Image.asset(
-                        'images',
-                        height: 60.0,
-                        width: 60.0,
-                      )
-                    ],
-                  )),
-                )
-              ],
-            ),
-          ),
+          key: scaffoldkey,
+          drawer: ShifferDrawer(),
           body: Stack(
             children: [
               GoogleMap(
@@ -60,6 +43,37 @@ class _HomePageState extends State<HomePage> {
                   });
                 },
               ),
+              // MenuButton
+              Positioned(
+                top: 20,
+                left: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    scaffoldkey.currentState.openDrawer();
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 5.0,
+                              spreadRadius: 0.5,
+                              offset: Offset(0.7, 0.7))
+                        ]),
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.menu,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
               Positioned(
                 right: 0,
                 left: 0,
