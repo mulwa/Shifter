@@ -65,4 +65,17 @@ class HelperMethods {
     }
     return directionDetails;
   }
+
+  static int fareEstimate(DirectionDetails details) {
+    // default fare = Ksh 100
+    // per km ksh 30
+    //  per min Ksh 20
+
+    double defaultFare = 50.0;
+    double distanceFare = (details.distanceValue / 1000) * 20;
+    double timeFare = (details.durationValue / 60) * 10;
+
+    double totalFare = defaultFare + distanceFare + timeFare;
+    return totalFare.truncate();
+  }
 }

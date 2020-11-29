@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shifter_app/src/providers/app_state.dart';
-import 'package:shifter_app/src/screens/home.dart';
 import 'package:provider/provider.dart';
+import 'package:shifter_app/src/screens/home/home.dart';
 
 void main() {
   runApp(MyApp());
