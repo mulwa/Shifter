@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shifter_app/src/providers/app_state.dart';
 import 'package:provider/provider.dart';
+import 'package:shifter_app/src/screens/authentication/loginPage.dart';
+import 'package:shifter_app/src/screens/authentication/splash_screen.dart';
 import 'package:shifter_app/src/screens/home/home.dart';
 
 void main() {
@@ -21,7 +23,11 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: HomePage(),
+        routes: {
+          "/home": (BuildContext context) => HomePage(),
+          "/login": (BuildContext context) => LoginPage()
+        },
+        home: SplashScreen(),
       ),
     );
   }
