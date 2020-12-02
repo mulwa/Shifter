@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shifter_app/src/screens/authentication/loginPage.dart';
 import 'package:shifter_app/src/utils/constants.dart';
+import 'package:shifter_app/src/utils/strings.dart';
 import 'package:shifter_app/src/widgets/app_card.dart';
 import 'package:shifter_app/src/widgets/custom_input_decoration.dart';
 import 'package:shifter_app/src/widgets/progress_dialog.dart';
@@ -156,7 +157,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Badoo Guide",
+                    AppStrings.appName,
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 26.0,

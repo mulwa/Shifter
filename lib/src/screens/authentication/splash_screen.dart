@@ -12,7 +12,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 5), () => Navigator.pushNamed(context, "/wrapper"));
+    Timer(Duration(seconds: 5), () => Navigator.pushNamed(context, "/login"));
   }
 
   @override
@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         backgroundColor: Colors.white,
                         radius: 50.0,
                         child: Text(
-                          "B..G",
+                          "Shifters",
                           style: TextStyle(
                               color: colorPrimary,
                               fontSize: 22.0,
@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         padding: EdgeInsets.only(top: 10.0),
                       ),
                       Text(
-                        "Badoo Guide",
+                        "SHIFTERS",
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       padding: EdgeInsets.only(top: 20.0),
                     ),
                     Text(
-                      "Best Badoo Guide for Everyone",
+                      "Move with easy and comfortable",
                       softWrap: true,
                       textAlign: TextAlign.center,
                       style: TextStyle(
