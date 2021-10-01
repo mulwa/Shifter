@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const MAPKEY = "AIzaSyCrUAOBai695_T7qrXL75koHmIUqXXAR7I";
+const MAPKEY = "AIzaSyDUnDtzxWOs9Z5zBmJpNvSWq-Ttyv4vzfA";
 
 const Color colorPrimary = Color(0xFF6a1b9a);
 const Color colorPrimaryDark = Color(0xFF38006b);

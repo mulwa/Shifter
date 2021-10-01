@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shifter_app/src/providers/app_state.dart';
 import 'package:provider/provider.dart';
+import 'package:shifter_app/src/providers/app_state.dart';
 import 'package:shifter_app/src/screens/authentication/loginPage.dart';
 import 'package:shifter_app/src/screens/authentication/splash_screen.dart';
 import 'package:shifter_app/src/screens/home/home.dart';

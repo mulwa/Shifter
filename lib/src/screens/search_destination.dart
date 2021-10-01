@@ -28,12 +28,13 @@ class _SearchDestinationState extends State<SearchDestination> {
   List<Prediction> destinationPrediction = [];
 
   void searchPlace(String placeName) async {
-    String url =
-        "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$MAPKEY&sessiontoken=1234567890&components=country:ke";
+    var url = Uri.parse(
+        "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$MAPKEY&sessiontoken=1234567890&components=country:ke");
 
     if (placeName.length > 2) {
       var res = await RequestHelper.getRequest(url);
       if (res == 'failed') {
+        print('Place search failed Failed');
         return;
       }
       if (res['status'] == 'OK') {
@@ -54,7 +55,7 @@ class _SearchDestinationState extends State<SearchDestination> {
   Widget build(BuildContext context) {
     setFocus();
     String address =
-        Provider.of<AppState>(context).pickupAddress.placeName ?? "";
+        Provider.of<AppState>(context).pickupAddress?.placeName ?? "Not Set";
     pickUpController.text = address;
     return Scaffold(
       body: SingleChildScrollView(

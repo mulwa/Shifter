@@ -15,8 +15,8 @@ class PridictionTile extends StatelessWidget {
   }) : super(key: key);
 
   void getPlaceDetails(String placeID, context) async {
-    String url =
-        "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeID&key=$MAPKEY";
+    var url = Uri.parse(
+        "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeID&key=$MAPKEY");
     var res = await RequestHelper.getRequest(url);
     if (res == 'failed') {
       return;

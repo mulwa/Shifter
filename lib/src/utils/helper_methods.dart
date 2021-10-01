@@ -2,6 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:shifter_app/src/models/address.dart';
 import 'package:shifter_app/src/models/direction_details.dart';
@@ -18,12 +19,15 @@ class HelperMethods {
         connectivityResult != ConnectivityResult.wifi) {
       return placeAddress;
     }
-    String url =
-        "https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=AIzaSyCrUAOBai695_T7qrXL75koHmIUqXXAR7I";
+    var url = Uri.parse(
+        "https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=$MAPKEY");
     var res = await RequestHelper.getRequest(url);
     print(res);
+    // print(res.body);
+    // print(res.statusCode);
     if (res != 'failed') {
       placeAddress = res['results'][0]['formatted_address'];
+      print(placeAddress);
       Address pickUpAddress = new Address();
       pickUpAddress.latitude = position.latitude;
       pickUpAddress.longitude = position.longitude;
@@ -40,8 +44,9 @@ class HelperMethods {
     print("Lat ${startPosition.longitude}");
     print("Long ${endPosition.longitude}");
     DirectionDetails directionDetails = new DirectionDetails();
-    String url =
-        'https://maps.googleapis.com/maps/api/directions/json?origin=${startPosition.latitude},${startPosition.longitude}&destination=${endPosition.latitude},${endPosition.longitude}&mode=driving&key=$MAPKEY';
+    var url = Uri.parse(
+        'https://maps.googleapis.com/maps/api/directions/json?origin=${startPosition.latitude},${startPosition.longitude}&destination=${endPosition.latitude},${endPosition.longitude}&mode=driving&key=$MAPKEY');
+
     try {
       var res = await RequestHelper.getRequest(url);
       print(res);
